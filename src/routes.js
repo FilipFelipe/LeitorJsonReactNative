@@ -11,9 +11,10 @@ export default createAppContainer(
     }, {
       headerLayoutPreset: 'center',
       defaultNavigationOptions: {
-        headerTitle: 'Aplicativo de Estudo 2019',
+        headerTitle: 'Instrumentação e publicação em uma infraestrutura de IoT',
         headerStyle: {
-          backgroundColor: '#DA552F'
+          backgroundColor: '#00CED1'
+          
         },
       },
     }),

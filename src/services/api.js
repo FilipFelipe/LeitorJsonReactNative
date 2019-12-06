@@ -2,7 +2,7 @@ import axios from 'axios';
 //import App from '..';
 
 const api = axios.create({
-baseURL: 'https://rocketseat-node.herokuapp.com/api'
+baseURL: 'http://10.102.50.46:1880'
 });
 
 export default api;

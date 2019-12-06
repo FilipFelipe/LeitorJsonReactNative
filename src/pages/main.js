@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import api from '../services/api';
 import Icon from 'react-native-vector-icons'
 import Product from "./product"
-import { createStackNavigator, createAppContainer, StackNavigator } from 'react-navigation';
+import { createStackNavigator, createAppContainer, StackNavigator, createDrawerNavigator } from 'react-navigation';
 
 import {
   StyleSheet,
@@ -22,32 +22,30 @@ import { returnStatement } from '@babel/types';
 
 export default class Main extends Component {
   
-  static navigationOptions = {
-     title: 'Guia de cuidados',
-     color: "#DA552F"
-  };
+ 
 
   state = {
     productIinfo: {},
-    docs: [], // lista
+    Salas: [], // lista
     page:1,
   };
 
   componentDidMount(){
-    this.loadProducts();
-    
-  }
-  loadProducts = async (page = 1) => {
-    const response = await api.get(`/products?page=${page}`);
 
-    const { docs, ...productIinfo } = response.data;
+    this.loadProducts();
+   
+  }
+  
+  loadProducts = async (page = 1) => {
+    const response = await api.get(`/temp?page=${page}`);
+
+    const { Salas, ...productIinfo } = response.data;
     this.setState({
-      docs: [... this.state.docs, ...docs],
+      Salas: [... this.state.Salas, ...Salas],
       productIinfo,
       page
     });
-    console.log(productIinfo);
-    console.log(docs);
+
     
   }
   _onPressButton() {
@@ -62,47 +60,57 @@ export default class Main extends Component {
 
     const pageNumber = page + 1;
     this.loadProducts(pageNumber);
-    console.log(pageNumber);
+  
   };
-
+  carregar = () => {
+    this.loadProducts();
+  }
 
   renderItem = ({item}) => (
     <View style={styles.productContainer}>
-      <Text style={styles.productTitle}>{item.title}</Text>
-      <Text style={styles.productDescription}>{item.description}</Text>
+      <View style={styles.tematitulo}>
+      <Text style={styles.Titulo}>{item.Titulo}</Text></View>
+      <Text style={styles.Status}>Status : {item.Status}</Text>
+      <Text style={styles.Temperatura}>Temperatura : {item.Temperatura} °C</Text>
+      <Text style={styles.Porta}>Porta : {item.Porta}</Text>
+      <Text style={styles.Evaporadora}>Evaporadora : {item.Evaporadora}</Text>
+      <Text style={styles.Condensadora}>Condensadora : {item.Condensadora}</Text>
       
-      <TouchableOpacity style={ styles.productButton}
-       
-      onPress={() => {this.props.navigation.navigate('Product', { product: item})}}>
-        <Text style={ styles.productButtonText}><Image source={{uri: 'https://facebook.github.io/react/logo-og.png'}} />Acessar</Text>
-      </TouchableOpacity>
-
     </View>
-  )  
+  
+  ) 
+
 
   render() {
 
     return (
-     
-      //Inicio
       
+       
       <View >
         <FlatList
         contentContainerStyle={ styles.list}
-        data={this.state.docs}
-        keyExtractor={item => item._id}
+        data={this.state.Salas}
+        keyExtractor={item => item.id}
         renderItem={this.renderItem}
-        onEndReachedThreshold={0.1}
-        onEndReached={() => this.loadmore()}
+        //onEndReachedThreshold={0.1}
+        //onEndReached={() => this.loadmore()}
         />
+        <View style={styles.temarodape}>
+        <Text style={styles.rodape}>Aplicativo desenvolvido por IFSP - Campus Birigui</Text>
       </View>
+      </View> 
+       
     );
+  
   }
+  
 }
+
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
   'Warning: componentWillReceiveProps is deprecated',
   'Module RCTImageLoader requires',
+  'Warning: '
 ]);
 
 
@@ -119,31 +127,71 @@ const styles = StyleSheet.create ({
     borderWidth: 1, // tamanho da borda
     borderColor: "#DDD", // cor da borda
     borderRadius: 5, // borda arrendodada 
-    padding: 20, // espacamento dentro do product
+    padding: 18, // espacamento dentro do product
     marginBottom: 20 // espaço entre o proximo
   },
-  productTitle: {
-   fontSize: 18,
+  Titulo: {
+   justifyContent: 'center',
+   alignItems: 'center', 
+   fontSize: 23,
    fontWeight: 'bold',
-   color: '#999',
+   //color: '#999',
    marginTop: 5, // espaco entre o titulo e o texto
    lineHeight: 24 // espacamento linha
   },
-  productButton: {
-    height: 42, // altura
-    //width:30, largura
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: '#DA552F',
-    backgroundColor: 'transparent', // transparent 
-    justifyContent: 'center', // centralizar 
-    alignItems: 'center', // centralizar 
-    marginTop: 10, // espaco entre o titulo e o texto
+
+  Porta: {
+    fontSize: 16,
+    //fontWeight: 'bold',
+   
   },
-  buttonContainer: {
+  Temperatura: {
+    fontSize: 16,
+    //fontWeight: 'bold',
+   
+  },
+  Evaporadora: {
+    fontSize: 16,
+    //fontWeight: 'bold',
+   
+  },
+  Status: {
+    fontSize: 16,
+    //fontWeight: 'bold',
+   
+  },
+  rodape: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#DA552F',
+   
   },
+  Condensadora: {
+    fontSize: 16,
+    //fontWeight: 'bold',
+   
+  },
+  temarodape:{
+    justifyContent: 'center',
+    alignItems: 'center', 
+    backgroundColor: "#FFF", // cor 
+    borderWidth: 2, // tamanho da borda
+    borderColor: "#00CED1", // cor da borda
+    //borderRadius: 2, // borda arrendodada 
+    backgroundColor: "#00CED1",
+    //padding: 2, // espacamento dentro do product
+
+  },
+  tematitulo:{
+    justifyContent: 'center',
+    alignItems: 'center', 
+    backgroundColor: "#FFF", // cor 
+    borderWidth: 2, // tamanho da borda
+    //borderColor: "#00CED1", // cor da borda
+    borderRadius: 5, // borda arrendodada 
+    //backgroundColor: "#00CED1",
+    //padding: 2, // espacamento dentro do product
+    borderColor: "#DDD", // cor da borda
+  },
+
 });
 
